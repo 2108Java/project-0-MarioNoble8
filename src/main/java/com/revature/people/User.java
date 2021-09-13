@@ -17,7 +17,10 @@ public class User {
 		this.password = password;
 	}
 	
-	
+	public void login(String userName, String password) {
+		
+		
+	}
 	}
 
 
