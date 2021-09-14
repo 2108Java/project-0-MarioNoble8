@@ -1,9 +1,11 @@
 package com.revature.people;
 
-public class User {
+public abstract class User {
 	
 	String userName;
 	String password;
+	String userType;
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -20,6 +22,13 @@ public class User {
 	public void login(String userName, String password) {
 		
 		
+	}
+	
+	abstract public String getUserType();
+	public User(String userName, String password, String userType) {
+		this.userName = userName;
+		this.password = password;
+		this.userType = userType;
 	}
 	}
 

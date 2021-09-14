@@ -1,5 +1,9 @@
 package com.revature.service;
 
-public class ServicePeople {
+import com.revature.people.Customer;
+
+public interface ServicePeople {
+	
+	public boolean addCustomer(Customer newCustomer);
 
 }
