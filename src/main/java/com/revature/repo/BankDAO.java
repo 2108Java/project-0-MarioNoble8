@@ -13,4 +13,8 @@ public interface BankDAO {
 	
 	String loginUser(String userName, String password);
 	
+	String optionsMenuCustomer(String accountName, String balance);
+	
+	boolean addAccount(String accountName, float balance, String acctType, String amountUsers);
+	
 }

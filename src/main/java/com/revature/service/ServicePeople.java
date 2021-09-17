@@ -11,5 +11,7 @@ public interface ServicePeople {
 	public boolean addEmployee(Employee newEmployee);
 	
 	public String loginUser(String user, String pass);
+	
+	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers);
 
 }

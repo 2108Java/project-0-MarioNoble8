@@ -120,7 +120,7 @@ public class MenuV1 implements Menu {
 		if(name.contentEquals("Employee")){
 			optionsMenuEmployee(sc);
 		}else if(name.contentEquals("Customer")) {
-			optionsMenuCustomer(sc);
+			optionsMenuCustomer(sc, username);
 		}else
 			System.out.println("Not a valid login");
 	}
@@ -147,15 +147,13 @@ public class MenuV1 implements Menu {
 			
 			switch(result) {
 			case "1":
-//				System.out.println("Approve or Reject a Bank Account");
-//				String user_name = scanner.nextLine();
-//				System.out.println("View Account Balance");
-//				int account = scanner.nextInt();
-//				scanner.nextLine();
-//				System.out.println("View all Transactions");
-//				String account = scanner.nextLine();
-//				
-//				
+				System.out.println("Approve or Reject a Bank Account");
+				String user_name = sc.nextLine();
+				System.out.println("View Account Balance");
+				int account = sc.nextInt();
+				sc.nextLine();
+				System.out.println("View all Transactions");
+				String typeAccount = sc.nextLine();
 				break;
 			case "2":
 				break;
@@ -170,7 +168,7 @@ public class MenuV1 implements Menu {
 		}
 	}
 	
-	private void optionsMenuCustomer(Scanner sc) {
+	private void optionsMenuCustomer(Scanner sc, String username) {
 		
 		boolean running = true;
 		
@@ -186,6 +184,20 @@ public class MenuV1 implements Menu {
 		
 		switch(result) {
 		case "1":
+			System.out.println("What is the name of the account");
+			String accountName = sc.nextLine();
+			System.out.println("What is the initial balance");
+			float balance = sc.nextFloat();
+			sc.nextLine();
+			System.out.println("What is the account type");			
+			String acctType = sc.nextLine();
+			System.out.println("List any other authorized users for account");
+			String amountUsers = sc.nextLine();
+			if(service.addAccount(accountName, balance, acctType, amountUsers)) {
+				System.out.println("Account made");
+			}else { 
+				System.out.println("Invalid Entry");
+			}
 			break;
 		case "2":
 			break;

@@ -86,4 +86,39 @@ public class BankDAOImpl implements BankDAO {
 		return null;
 
 	}
+
+	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers) {
+	
+		try(Connection connection = DriverManager.getConnection(url, username, password)){
+		
+			String sql = "select account_type from accounts where user_name = ? and password = ?";
+		
+			PreparedStatement ps = connection.prepareStatement("insert into accounts values(?,?,?,?,?,?)");
+			ps.setString(1, accountName);
+			ps.setBoolean(2, true);
+			ps.setFloat(3, balance);
+			ps.setString(4, acctType);
+			ps.setString(5, amountUsers);
+			ps.setBoolean(6, true);
+			
+			int i = ps.executeUpdate();
+			System.out.println(i + "records inserted");
+			connection.close();
+		
+			
+	
+		} catch (SQLException e) {
+	
+			e.printStackTrace();
+	}
+		return true;
+
+}
+
+
+	@Override
+	public String optionsMenuCustomer(String accountName, String balance) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

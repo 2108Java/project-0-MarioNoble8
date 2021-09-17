@@ -23,10 +23,16 @@ public class ServicePeopleImpl implements ServicePeople {
 		return database.insertEmployee(newEmployee);
 	}
 
-	@Override
+	
 	public String loginUser(String user, String pass) {
 		
 		return database.loginUser(user, pass);
+	}
+
+	
+	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers) {
+		
+		return database.addAccount(accountName, balance, acctType, amountUsers);
 	}
 
 }
