@@ -12,6 +12,24 @@ public interface ServicePeople {
 	
 	public String loginUser(String user, String pass);
 	
-	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers);
+	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers, String username);
+
+
+	public boolean viewBalance(String accountName, String username);
+
+
+	public boolean addDeposit(String accountName, float balance);
+
+
+	public boolean takeMoney(String accountName, float balance);
+
+
+	public void approvingAccounts();
+
+
+	public void viewAccounts(String userName);
+
+
+	public boolean transferMoney(String accountName, String accountNamme, float balance, String usrname);
 
 }

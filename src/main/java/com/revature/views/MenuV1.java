@@ -131,15 +131,15 @@ public class MenuV1 implements Menu {
 	}
 	
 	private void optionsMenuEmployee(Scanner sc) {
-		
+		String userName;
 		
 		boolean running = true;
 		
 		while (running) {
 			
 			
-			System.out.println("1) Approve/Reject Bank Account");
-			System.out.println("2) View Customers Bank Account");
+			System.out.println("1) Approve/Reject Bank Accounts");
+			System.out.println("2) View Customers Bank Accounts");
 			System.out.println("3) View all Log Transactions");
 			System.out.println("4) Exit");
 			
@@ -147,19 +147,17 @@ public class MenuV1 implements Menu {
 			
 			switch(result) {
 			case "1":
-				System.out.println("Approve or Reject a Bank Account");
-				String user_name = sc.nextLine();
-				System.out.println("View Account Balance");
-				int account = sc.nextInt();
-				sc.nextLine();
-				System.out.println("View all Transactions");
-				String typeAccount = sc.nextLine();
+				service.approvingAccounts();
 				break;
 			case "2":
+				System.out.println("What is the Customer's username");
+				userName = sc.nextLine();
+				service.viewAccounts(userName);
 				break;
 			case "3":
 				break;
 			case "4":
+				running = false;
 				break;
 				default:
 					System.out.println("That's not a valid input!");
@@ -169,7 +167,9 @@ public class MenuV1 implements Menu {
 	}
 	
 	private void optionsMenuCustomer(Scanner sc, String username) {
-		
+		String accountName;
+		String accountNamme;
+		float balance;
 		boolean running = true;
 		
 		while(running) {
@@ -177,7 +177,7 @@ public class MenuV1 implements Menu {
 		System.out.println("2) View Account Balance");
 		System.out.println("3) Deposit");
 		System.out.println("4) Withdrawl");
-		System.out.println("5) Transfer Funds");
+		System.out.println("5) Transfer Funds");//come back to it
 		System.out.println("6) Exit");
 		
 		String result = sc.nextLine();
@@ -185,29 +185,71 @@ public class MenuV1 implements Menu {
 		switch(result) {
 		case "1":
 			System.out.println("What is the name of the account");
-			String accountName = sc.nextLine();
+			accountName = sc.nextLine();
 			System.out.println("What is the initial balance");
-			float balance = sc.nextFloat();
+			balance = sc.nextFloat();
 			sc.nextLine();
 			System.out.println("What is the account type");			
 			String acctType = sc.nextLine();
 			System.out.println("List any other authorized users for account");
-			String amountUsers = sc.nextLine();
-			if(service.addAccount(accountName, balance, acctType, amountUsers)) {
+			String amountUsers = getAccessUsers(sc);
+			if(service.addAccount(accountName, balance, acctType, amountUsers, username)) {
 				System.out.println("Account made");
 			}else { 
 				System.out.println("Invalid Entry");
 			}
 			break;
 		case "2":
+			System.out.println("View balance of which account");
+			accountName = sc.nextLine();
+			if( service.viewBalance(accountName, username)) {
+				
+			} else {
+				System.out.println("Transaction failed");
+			}
+	
 			break;
 		case "3":
+			System.out.println("What is the account name");
+			accountName = sc.nextLine();
+			System.out.println("How much do you want to deposit");
+			balance = sc.nextFloat();
+			if(service.addDeposit(accountName, balance)) {
+				System.out.println("Funds deposited");
+			}else {
+				System.out.println("Transaction failed");
+			}
+			sc.nextLine();
 			break;
 		case "4":
+			System.out.println("What is the account name");
+			accountName = sc.nextLine();
+			System.out.println("How much do you want to withdraw");
+			balance = sc.nextFloat();
+			if(service.takeMoney(accountName, balance)) {
+				System.out.println("Funds withdrawn");
+			}else {
+				System.out.println("Transaction failed");
+			}
+			sc.nextLine();
 			break;
 		case "5":
+			System.out.println("Which account are you transferring from?");
+			accountName = sc.nextLine();
+			System.out.println("Which account are you transferring too?");
+			accountNamme = sc.nextLine();
+			System.out.println("How much would you like to transfer?");
+			balance = sc.nextFloat();
+			sc.nextLine();
+			if(service.transferMoney(accountName, accountNamme, balance, username)) {
+				System.out.println("Funds added");
+			}else {
+				System.out.println("Transaction denied");
+			}
+			sc.nextLine();
 			break;
 		case "6":
+			running = false;
 			break;
 			default:
 				System.out.println("That's not a valid input!");
@@ -215,6 +257,32 @@ public class MenuV1 implements Menu {
 		}
 		}
 	}
+	private String getAccessUsers(Scanner sc) {
+		String AccessUsers = "";
+		boolean accessing = true;
+		while(accessing) {
+			System.out.println("1) Add User?");
+			System.out.println("2) Exit");
+			
+			String result = sc.nextLine();
+			
+			switch(result) {
+				case "1":
+					System.out.println("Enter User");
+					String hotdog = sc.nextLine();
+					AccessUsers = AccessUsers + hotdog + ",";
+					break;
+				case "2":
+					accessing = false;
+					break;
+			}
+		}
+		
+		return AccessUsers;
+		
+	}
+
+
 	private void optionsMenu() {
 		System.out.println("1) Login");
 		System.out.println("2) Exit");
@@ -246,7 +314,7 @@ public class MenuV1 implements Menu {
 				
 			}
 	}
-
+			scanner.close();
 	}
 
 

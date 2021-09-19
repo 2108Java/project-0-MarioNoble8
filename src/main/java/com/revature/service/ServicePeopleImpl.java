@@ -30,9 +30,45 @@ public class ServicePeopleImpl implements ServicePeople {
 	}
 
 	
-	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers) {
+	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers, String username) {
 		
-		return database.addAccount(accountName, balance, acctType, amountUsers);
+		return database.addAccount(accountName, balance, acctType, amountUsers, username);
+	}
+
+
+	
+	public boolean addDeposit(String accountName, float balance) {
+		// TODO Auto-generated method stub
+		return database.addDeposit(accountName, balance);
+	}
+
+	@Override
+	public boolean takeMoney(String accountName, float balance) {
+		// TODO Auto-generated method stub
+		return database.takeMoney(accountName, balance);
+	}
+
+	@Override
+	public void approvingAccounts() {
+		database.approvingAccounts();		
+	}
+
+	@Override
+	public void viewAccounts(String userName) {
+		database.viewAccounts(userName);
+		
+	}
+
+	@Override
+	public boolean viewBalance(String accountName, String username) {
+		// TODO Auto-generated method stub
+		return database.viewBalance(accountName, username);
+	}
+
+	@Override
+	public boolean transferMoney(String accountName, String accountNamme, float balance, String usrname) {
+		// TODO Auto-generated method stub
+		return database.transferMoney(accountName, accountNamme, balance, usrname);
 	}
 
 }
