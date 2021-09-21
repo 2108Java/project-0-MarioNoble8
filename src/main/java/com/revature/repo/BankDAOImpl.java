@@ -4,12 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import org.apache.log4j.Logger;
 
 import com.revature.people.Customer;
 import com.revature.people.Employee;
 import com.revature.people.User;
+import com.revature.views.MenuV1;
 
 
 public class BankDAOImpl implements BankDAO {
@@ -18,11 +22,11 @@ public class BankDAOImpl implements BankDAO {
 	private String username = "postgres";
 	private String password = "noble1";
 	private String url = "jdbc:postgresql://" + dbLocation + ":5433/postgres";
-	
+	private static final Logger loggy = Logger.getLogger("BankDAOImpl.class");
 
 	@Override
 	public boolean insertCustomer(Customer newCustomer) {
-			
+			String sql = "";
 			try(Connection connection = DriverManager.getConnection(url, username, password)){
 				
 				PreparedStatement stmt=connection.prepareStatement("insert into users values(?,?,?,?)");
@@ -35,6 +39,7 @@ public class BankDAOImpl implements BankDAO {
 				connection.close();
 				
 			} catch (SQLException e) {
+				BankDAOImpl.loggy.fatal(sql);
 				e.printStackTrace();
 			}
 		
@@ -46,7 +51,7 @@ public class BankDAOImpl implements BankDAO {
 
 	@Override
 	public boolean insertEmployee(Employee newEmployee) {
-		
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			
 			PreparedStatement stmt=connection.prepareStatement("insert into users values(?,?,?,?)");
@@ -59,6 +64,7 @@ public class BankDAOImpl implements BankDAO {
 			connection.close();
 			
 		} catch (SQLException e) {
+			BankDAOImpl.loggy.fatal(sql);
 			e.printStackTrace();
 		}
 	
@@ -68,10 +74,10 @@ public class BankDAOImpl implements BankDAO {
 	}
 	
 	public String loginUser(String userNme, String passwrd) {
-		
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			
-			String sql = "select user_type from users where user_name = ? and password = ?";
+			sql = "select user_type from users where user_name = ? and password = ?";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(1, userNme);
@@ -82,7 +88,7 @@ public class BankDAOImpl implements BankDAO {
 			return rs.getString("user_type");
 		
 	} catch (SQLException e) {
-		
+		BankDAOImpl.loggy.fatal(sql);
 		e.printStackTrace();
 	}
 		return null;
@@ -90,7 +96,7 @@ public class BankDAOImpl implements BankDAO {
 	}
 
 	public boolean addAccount(String accountName, float balance, String acctType, String amountUsers, String user) {
-	
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 		
 			
@@ -111,7 +117,7 @@ public class BankDAOImpl implements BankDAO {
 			
 	
 		} catch (SQLException e) {
-	
+			BankDAOImpl.loggy.fatal(sql);
 			e.printStackTrace();
 	}
 		return true;
@@ -128,6 +134,7 @@ public class BankDAOImpl implements BankDAO {
 
 	@Override
 	public boolean viewBalance(String accountName, String user) {
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			boolean loggedIn = false;
 			
@@ -137,7 +144,7 @@ public class BankDAOImpl implements BankDAO {
 			if(loggedIn) {
 				
 				
-			String sql = "select balance from accounts where name_account = ? and approve_deny_account = true";
+			sql = "select balance from accounts where name_account = ? and approve_deny_account = true";
 		
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(1, accountName);
@@ -152,7 +159,7 @@ public class BankDAOImpl implements BankDAO {
 			
 	
 		} catch (SQLException e) {
-	
+			BankDAOImpl.loggy.fatal(sql);
 			e.printStackTrace();
 	}
 		return false;
@@ -161,9 +168,10 @@ public class BankDAOImpl implements BankDAO {
 
 	@Override
 	public boolean addDeposit(String accountName, float balance) {
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			
-			String sql = "update accounts set balance = balance + ? where name_account = ? and approve_deny_account = true";
+			sql = "update accounts set balance = balance + ? where name_account = ? and approve_deny_account = true";
 		
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(2, accountName);
@@ -175,7 +183,7 @@ public class BankDAOImpl implements BankDAO {
 			
 	
 		} catch (SQLException e) {
-	
+			BankDAOImpl.loggy.fatal(sql);
 			e.printStackTrace();
 	}
 		return false;
@@ -184,9 +192,10 @@ public class BankDAOImpl implements BankDAO {
 
 	@Override
 	public boolean takeMoney(String accountName, float balance) {
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			
-			String sql = "update accounts set balance = balance - ? where name_account = ? and approve_deny_account = true";
+			sql = "update accounts set balance = balance - ? where name_account = ? and approve_deny_account = true";
 		
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(2, accountName);
@@ -198,7 +207,7 @@ public class BankDAOImpl implements BankDAO {
 			
 	
 		} catch (SQLException e) {
-	
+			BankDAOImpl.loggy.fatal(sql);
 			e.printStackTrace();
 	}
 		return false;
@@ -211,9 +220,10 @@ public class BankDAOImpl implements BankDAO {
 		String approveAccounts;
 		String primaryHolder;
 		Scanner scanner = new Scanner(System.in);
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)) {
 			
-			String sql = "select name_account, primary_holder from accounts where approve_deny_account = false";
+			sql = "select name_account, primary_holder from accounts where approve_deny_account = false";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
 			
@@ -229,6 +239,7 @@ public class BankDAOImpl implements BankDAO {
 				
 				switch(result) {
 				case "1":
+					BankDAOImpl.loggy.info("User selected 1, approving an account");
 					System.out.println("Account approved");
 					sql = "update accounts set approve_deny_account = true where name_account = ?";
 					ps = connection.prepareStatement(sql);
@@ -236,9 +247,11 @@ public class BankDAOImpl implements BankDAO {
 					ps.executeUpdate();
 					break;
 				case "2":
+					BankDAOImpl.loggy.info("User selected 2, denying an account");
 					System.out.println("Account denied");
 					break;
 					default:
+						BankDAOImpl.loggy.warn("Not a valid input!");
 						System.out.println("Invalid input");
 				}
 				
@@ -247,7 +260,8 @@ public class BankDAOImpl implements BankDAO {
 			scanner.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
+			BankDAOImpl.loggy.fatal(sql);
 			e.printStackTrace();
 		}
 		// TODO Auto-generated method stub
@@ -258,18 +272,52 @@ public class BankDAOImpl implements BankDAO {
 
 	@Override
 	public void viewAccounts(String userName) {
-		
+		String sql = "";
+		try(Connection connection = DriverManager.getConnection(url, username, password)) {
+			
+			sql = "select * from accounts";
+			
+			PreparedStatement ps = connection.prepareStatement(sql);
+			
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsMetaData = rs.getMetaData();
+			int count = rsMetaData.getColumnCount();
+			while(rs.next()) {
+				if(rs.getString("primary_holder").contentEquals(userName)) {
+					for(int i = 1; i <= count; i++) {
+						System.out.printf(String.format("%s \t", rs.getString(i)));
+					}
+					System.out.println();
+//					System.out.printf(String.format("%f\n",rs.getFloat("balance")));
+				}else {
+					if(rs.getString("list_of_access").contains(userName)) {
+						for(int i = 1; i <= count; i++) {
+							
+							
+							System.out.printf(String.format("%s \t", rs.getString(i)));
+						}
+						System.out.println();
+					}
+				}
+			}
+			
+			
+		} catch (SQLException e) {
+			BankDAOImpl.loggy.fatal(sql);
+			e.printStackTrace();
+		}
 		
 	}
 
 
 	@Override
 	public boolean transferMoney(String accountName, String accountNamme, float balance, String usrname) {
+		String sql = "";
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			
 			if(checkAccess(usrname, accountName)) {
 				
-			String sql = "select name_account from accounts where name_account = ?";
+			sql = "select name_account from accounts where name_account = ?";
 		
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(1, accountName);
@@ -327,17 +375,18 @@ public class BankDAOImpl implements BankDAO {
 			}
 			
 		} catch (SQLException e) {
-	
+			BankDAOImpl.loggy.fatal(sql);
 			e.printStackTrace();
 	}
 		return false;
 	}
 
 	private boolean checkAccess(String User, String accountName) {
+		String sqll = "";
 		boolean loggedIn = false;
 		try(Connection connection = DriverManager.getConnection(url, username, password)) {
 			
-		String sqll= "select list_of_access , primary_holder from accounts where name_account = ?;";
+		sqll= "select list_of_access , primary_holder from accounts where name_account = ?;";
 		
 		PreparedStatement ps = connection.prepareStatement(sqll);
 		ps.setString(1, accountName);
@@ -360,7 +409,7 @@ public class BankDAOImpl implements BankDAO {
 		}
 		
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			BankDAOImpl.loggy.fatal(sqll);
 			e.printStackTrace();
 		}
 		return loggedIn;
