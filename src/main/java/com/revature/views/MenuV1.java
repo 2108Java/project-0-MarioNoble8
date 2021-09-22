@@ -268,6 +268,7 @@ public class MenuV1 implements Menu {
 			MenuV1.loggy.info("User selected 3, requesting how much money to deposit");
 			System.out.println("How much do you want to deposit");
 			balance = sc.nextFloat();
+			MenuV1.loggy.info(String.format("User is depositing %.02f", balance));
 			if(service.addDeposit(accountName, balance)) {
 				System.out.println("Funds deposited");
 			}else {
@@ -282,6 +283,7 @@ public class MenuV1 implements Menu {
 			MenuV1.loggy.info("User selected 4, requesting how much money to withdraw from account");
 			System.out.println("How much do you want to withdraw");
 			balance = sc.nextFloat();
+			MenuV1.loggy.info(String.format("User is withdrawing %.02f", balance));
 			if(service.takeMoney(accountName, balance)) {
 				System.out.println("Funds withdrawn");
 			}else {
@@ -293,12 +295,15 @@ public class MenuV1 implements Menu {
 			MenuV1.loggy.info("User selected 5, requesting an account to transfer from");
 			System.out.println("Which account are you transferring from?");
 			accountName = sc.nextLine();
+			MenuV1.loggy.info(String.format("User is withdrawing from %s", accountName));
 			MenuV1.loggy.info("User selected 5, requesting an account to transfer too");
 			System.out.println("Which account are you transferring too?");
 			accountNamme = sc.nextLine();
+			MenuV1.loggy.info(String.format("User is transferring to %s", accountNamme));
 			MenuV1.loggy.info("User selected 5, requesting how much to transfer");
 			System.out.println("How much would you like to transfer?");
 			balance = sc.nextFloat();
+			MenuV1.loggy.info(String.format("User is attempting to transfer %.02f", balance));
 			sc.nextLine();
 			if(service.transferMoney(accountName, accountNamme, balance, username)) {
 				System.out.println("Funds added");
