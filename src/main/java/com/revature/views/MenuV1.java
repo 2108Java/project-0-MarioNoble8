@@ -1,5 +1,12 @@
 package com.revature.views;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -35,8 +42,8 @@ public class MenuV1 implements Menu {
 		boolean running = true;
 		while(running) {
 			
-		System.out.println("1) Create an account");
-		System.out.println("2) Existing account");
+		System.out.println("1) Register a Customer or Employee");
+		System.out.println("2) Registered User");
 		System.out.println("3) Exit");
 		
 		String result = sc.nextLine();
@@ -58,7 +65,7 @@ public class MenuV1 implements Menu {
 				MenuV1.loggy.warn("Not a valid input!");
 				System.out.println("That's not a valid input!");
 				System.out.println("Try again!");
-				
+				break;
 		}
 		
 		}
@@ -123,6 +130,7 @@ public class MenuV1 implements Menu {
 				MenuV1.loggy.warn("Not a valid input!");
 				System.out.println("That's not a valid input!");
 				System.out.println("Try again!");
+				break;
 		}
 				
 		}
@@ -139,7 +147,7 @@ public class MenuV1 implements Menu {
 		String name = service.loginUser(username, password);
 		
 		if(name.contentEquals("Employee")){
-			optionsMenuEmployee(sc);
+			optionsMenuEmployee(sc, username);
 		}else if(name.contentEquals("Customer")) {
 			optionsMenuCustomer(sc, username);
 		}else
@@ -151,7 +159,7 @@ public class MenuV1 implements Menu {
 
 	}
 	
-	private void optionsMenuEmployee(Scanner sc) {
+	private void optionsMenuEmployee(Scanner sc, String username) {
 		String userName;
 		
 		boolean running = true;
@@ -162,7 +170,7 @@ public class MenuV1 implements Menu {
 			System.out.println("1) Approve/Reject Bank Accounts");
 			System.out.println("2) View Customers Bank Accounts");
 			System.out.println("3) View all Log Transactions");
-			System.out.println("4) Exit");
+			System.out.println("4) Logout");
 			
 			String result = sc.nextLine();
 			
@@ -179,15 +187,28 @@ public class MenuV1 implements Menu {
 				break;
 			case "3":
 				MenuV1.loggy.info("User selected 3, viewing all Log Transactions");
+				try {
+				      File myObj = new File("C:\\Users\\dmari\\OneDrive\\Documents\\GitHub\\2108\\LogLoggy\\log4j-log-application.log");
+				      Scanner myReader = new Scanner(myObj);
+				      while (myReader.hasNextLine()) {
+				        String data = myReader.nextLine();
+				        System.out.println(data);
+				      }
+				      myReader.close();
+				    } catch (FileNotFoundException e) {
+				      System.out.println("An error occurred.");
+				      e.printStackTrace();
+				    }
 				break;
 			case "4":
-				MenuV1.loggy.info("User selected 4, Employee chose to exit the Employee menu");
+				MenuV1.loggy.info("User selected 4," + username + "Employee logged out");
 				running = false;
 				break;
 				default:
 					MenuV1.loggy.warn("Not a valid input!");
 					System.out.println("That's not a valid input!");
 					System.out.println("Try again!");
+					break;
 			}
 		}
 	}
@@ -204,7 +225,7 @@ public class MenuV1 implements Menu {
 		System.out.println("3) Deposit");
 		System.out.println("4) Withdrawl");
 		System.out.println("5) Transfer Funds");//come back to it
-		System.out.println("6) Exit");
+		System.out.println("6) Logout");
 		
 		String result = sc.nextLine();
 		
@@ -219,7 +240,7 @@ public class MenuV1 implements Menu {
 			sc.nextLine();
 			MenuV1.loggy.info("User selected 1, choosing account type");
 			System.out.println("What is the account type");			
-			String acctType = sc.nextLine();
+			String acctType = getTypeOfAccount(sc);
 			MenuV1.loggy.info("User selected 1, requesting other authorized users for account");
 			System.out.println("List any other authorized users for account");
 			String amountUsers = getAccessUsers(sc);
@@ -284,16 +305,16 @@ public class MenuV1 implements Menu {
 			}else {
 				System.out.println("Transaction denied");
 			}
-			sc.nextLine();
 			break;
 		case "6":
-			MenuV1.loggy.info("User selected 6, exiting the Customer's Menu");
+			MenuV1.loggy.info("User selected 6, "+ username+ "Customer logged out");
 			running = false;
 			break;
 			default:
 				MenuV1.loggy.warn("Not a valid input!");
 				System.out.println("That's not a valid input!");
 				System.out.println("Try again!");
+				break;
 		}
 		}
 	}
@@ -317,19 +338,56 @@ public class MenuV1 implements Menu {
 					MenuV1.loggy.info("User selected 2, exiting adding more users");
 					accessing = false;
 					break;
+					default:
+						MenuV1.loggy.warn("Not a valid input!");
+						System.out.println("That's not a valid input!");
+						System.out.println("Try again!");
+						break;
+				}
 			}
+		return AccessUsers;
 		}
 		
-		return AccessUsers;
 		
-	}
+	
+	private String getTypeOfAccount(Scanner sc) {
+		
+		boolean accessing = true;
+		while(accessing) {
+			System.out.println("1) Checking");
+			System.out.println("2) Savings");
+			
+			
+			String result = sc.nextLine();
+			
+			switch(result) {
+				case "1":
+					MenuV1.loggy.info("User selected 1, choosing checkings account");
+				return "checking";
+			case "2":
+					MenuV1.loggy.info("User selected 2, choosing savings account");
+				return "savings";
+				
+					default:
+						MenuV1.loggy.warn("Not a valid input!");
+						System.out.println("That's not a valid input!");
+						System.out.println("Try again!");
+						break;
+				}
+			}
+		return "";
+		}
+		
+		
+		
+	
 
 
 	private void optionsMenu() {
 		System.out.println("1) Login");
-		MenuV1.loggy.info("User selected 1, user chose to login into the application");
+		
 		System.out.println("2) Exit");
-		MenuV1.loggy.info("User selected 2, user chose not to login into the application");
+		
 		
 	}
 	
@@ -360,7 +418,7 @@ public class MenuV1 implements Menu {
 				MenuV1.loggy.warn("Not a valid input!");
 				System.out.println("That's not a valid input!");
 				System.out.println("Try again!");
-				
+				break;
 			}
 	}
 			scanner.close();
